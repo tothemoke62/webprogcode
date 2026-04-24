@@ -9,6 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
+//Lekérjük magát az adatbázis(Kérlek működj)
+
 try {
     $dbh = new PDO(
         'mysql:host=localhost;dbname=pizza;charset=utf8',
