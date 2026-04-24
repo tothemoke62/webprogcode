@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SPA – Net Pizzéria</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-logo">🍕 Net Pizzéria</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Főoldal</a></li>
+      <li><a href="javascript.html">JavaScript</a></li>
+      <li><a href="react.html">React</a></li>
+      <li><a href="spa.html" class="active">SPA</a></li>
+      <li><a href="fetchapi.html">Fetch API</a></li>
+      <li><a href="axios.html">Axios</a></li>
+      <li><a href="oojs.html">OOJS</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <h1>SPA – Single Page Application</h1>
+    <p>Egyoldalas alkalmazás – Kő-Papír-Olló és Todo Lista React komponensekkel</p>
+  </div>
+
+  <!-- SPA React app gyökere -->
+  <div id="root"></div>
+
+  <!-- Vite build JS -->
+  <script type="module" src="spa/dist/assets/index-ec8f9b20.js"></script>
+
+</body>
+</html>

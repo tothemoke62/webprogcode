@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OO JavaScript – Net Pizzéria</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    #jatek-canvas {
+      background: #1A1008;
+      border-radius: 16px;
+      display: block;
+      margin: 0 auto;
+      cursor: crosshair;
+      max-width: 100%;
+    }
+    .jatek-info {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+    .jatek-stat {
+      background: #fff;
+      border: 1px solid #F0E8DF;
+      border-radius: 12px;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+    .jatek-stat .ertek {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #D7263D;
+    }
+    .jatek-stat .felirat {
+      font-size: 0.8rem;
+      color: #8C7B6E;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .jatek-gombok {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">🍕 Net Pizzéria</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Főoldal</a></li>
+      <li><a href="javascript.html">JavaScript</a></li>
+      <li><a href="react.html">React</a></li>
+      <li><a href="spa.html">SPA</a></li>
+      <li><a href="fetchapi.html">Fetch API</a></li>
+      <li><a href="axios.html">Axios</a></li>
+      <li><a href="oojs.html" class="active">OOJS</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <h1>OO JavaScript</h1>
+    <p>Pizzaelkapó játék – Objektumorientált JavaScript grafikus alkalmazás</p>
+  </div>
+
+  <div class="crud-section">
+
+    <!-- STATISZTIKA -->
+    <div class="jatek-info">
+      <div class="jatek-stat">
+        <div class="ertek" id="pontszam">0</div>
+        <div class="felirat">Pont</div>
+      </div>
+      <div class="jatek-stat">
+        <div class="ertek" id="elet">3</div>
+        <div class="felirat">Élet ❤️</div>
+      </div>
+      <div class="jatek-stat">
+        <div class="ertek" id="szint">1</div>
+        <div class="felirat">Szint</div>
+      </div>
+    </div>
+
+    <!-- CANVAS -->
+    <canvas id="jatek-canvas" width="700" height="420"></canvas>
+
+    <!-- GOMBOK -->
+    <div class="jatek-gombok">
+      <button class="btn btn-primary" id="inditBtn" onclick="jatekIndit()">▶️ Indítás</button>
+      <button class="btn btn-delete" onclick="jatekUjra()">🔄 Újrakezd</button>
+    </div>
+
+    <p style="text-align:center; color:#8C7B6E; margin-top:1rem; font-size:0.9rem;">
+      Kattints a pizzákra mielőtt leesnek! Minden 10 pont után gyorsabb lesz.
+    </p>
+
+  </div>
+
+  <script>
+    // ============================================================
+    // OSZTÁLYOK – Objektumorientált JavaScript
+    // ============================================================
+
+    // Alap játékelem osztály
+    class JatekElem {
+      constructor(x, y, meret) {
+        this.x = x;
+        this.y = y;
+        this.meret = meret;
+        this.aktiv = true;
+      }
+
+      frissit() {}
+      rajzol(ctx) {}
+    }
+
+    // ── Pizza osztály ─────────────────────────────────────────
+    class Pizza extends JatekElem {
+      constructor(x, sebesseg, szint) {
+        super(x, -40, 36);
+        this.sebesseg = sebesseg + (szint - 1) * 0.4;
+        this.forgasszog = Math.random() * Math.PI * 2;
+        this.forgassebesseg = (Math.random() - 0.5) * 0.08;
+      }
+
+      frissit() {
+        this.y += this.sebesseg;
+        this.forgasszog += this.forgassebesseg;
+      }
+
+      rajzol(ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.forgasszog);
+        ctx.font = `${this.meret * 2}px serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🍕', 0, 0);
+        ctx.restore();
+      }
+
+      tartalmazza(px, py) {
+        return Math.hypot(px - this.x, py - this.y) < this.meret;
+      }
+    }
+
+    // ── Robbanas osztály (vizuális effekt) ────────────────────
+    class Robbanas extends JatekElem {
+      constructor(x, y) {
+        super(x, y, 40);
+        this.atlatszosag = 1.0;
+        const emojik = ['✨', '⭐', '💥'];
+        this.emoji = emojik[Math.floor(Math.random() * emojik.length)];
+      }
+
+      frissit() {
+        this.atlatszosag -= 0.05;
+        this.meret += 2;
+        if (this.atlatszosag <= 0) this.aktiv = false;
+      }
+
+      rajzol(ctx) {
+        ctx.save();
+        ctx.globalAlpha = this.atlatszosag;
+        ctx.font = `${this.meret}px serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(this.emoji, this.x, this.y);
+        ctx.restore();
+      }
+    }
+
+    // ── Jatek főosztály ───────────────────────────────────────
+    class Jatek {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx    = canvas.getContext('2d');
+        this.szeles = canvas.width;
+        this.magas  = canvas.height;
+
+        this.fut           = false;
+        this.pont          = 0;
+        this.elet          = 3;
+        this.szint         = 1;
+        this.pizzak        = [];
+        this.robbanasok    = [];
+        this.keretszamlalo = 0;
+        this.pizzaKozok    = 80;
+
+        this.canvas.addEventListener('click', (e) => this.kattintas(e));
+      }
+
+      indit() {
+        if (this.fut) return;
+        this.fut = true;
+        this.animacio();
+      }
+
+      animacio() {
+        if (!this.fut) return;
+        this.frissit();
+        this.rajzol();
+        requestAnimationFrame(() => this.animacio());
+      }
+
+      frissit() {
+        this.keretszamlalo++;
+
+        // Új pizza generálása
+        if (this.keretszamlalo % this.pizzaKozok === 0) {
+          const x = this.veletlen(60, this.szeles - 60);
+          this.pizzak.push(new Pizza(x, 2.5, this.szint));
+        }
+
+        // Pizzák frissítése
+        this.pizzak.forEach(p => p.frissit());
+
+        // Leesett pizzák
+        this.pizzak.filter(p => p.y > this.magas + 50 && p.aktiv).forEach(p => {
+          p.aktiv = false;
+          this.elet--;
+          document.getElementById('elet').textContent = this.elet;
+          if (this.elet <= 0) this.vege();
+        });
+
+        this.pizzak     = this.pizzak.filter(p => p.aktiv);
+        this.robbanasok = this.robbanasok.filter(r => r.aktiv);
+        this.robbanasok.forEach(r => r.frissit());
+
+        // Szint növelés
+        const ujSzint = Math.floor(this.pont / 10) + 1;
+        if (ujSzint !== this.szint) {
+          this.szint = ujSzint;
+          this.pizzaKozok = Math.max(30, 80 - (this.szint - 1) * 8);
+          document.getElementById('szint').textContent = this.szint;
+        }
+      }
+
+      rajzol() {
+        const ctx = this.ctx;
+        ctx.clearRect(0, 0, this.szeles, this.magas);
+
+        // Háttér
+        ctx.fillStyle = '#1A1008';
+        ctx.fillRect(0, 0, this.szeles, this.magas);
+
+        // Rács
+        ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < this.szeles; x += 50) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, this.magas); ctx.stroke();
+        }
+        for (let y = 0; y < this.magas; y += 50) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(this.szeles, y); ctx.stroke();
+        }
+
+        // Veszélyzóna
+        ctx.fillStyle = 'rgba(215,38,61,0.12)';
+        ctx.fillRect(0, this.magas - 50, this.szeles, 50);
+        ctx.fillStyle = 'rgba(215,38,61,0.6)';
+        ctx.fillRect(0, this.magas - 4, this.szeles, 4);
+        ctx.fillStyle = 'rgba(215,38,61,0.4)';
+        ctx.font = '12px DM Sans, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('⚠️ VESZÉLYZÓNA', this.szeles / 2, this.magas - 18);
+
+        // Elemek kirajzolása
+        this.pizzak.forEach(p => p.rajzol(ctx));
+        this.robbanasok.forEach(r => r.rajzol(ctx));
+
+        // Kezdőképernyő
+        if (!this.fut && this.elet > 0) {
+          ctx.fillStyle = 'rgba(0,0,0,0.6)';
+          ctx.fillRect(0, 0, this.szeles, this.magas);
+          ctx.fillStyle = '#fff';
+          ctx.font = 'bold 42px Playfair Display, serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('🍕 Pizzaelkapó', this.szeles / 2, this.magas / 2 - 20);
+          ctx.font = '18px DM Sans, sans-serif';
+          ctx.fillStyle = 'rgba(255,255,255,0.65)';
+          ctx.fillText('Nyomj Indítást a játékhoz!', this.szeles / 2, this.magas / 2 + 25);
+        }
+
+        // Game over
+        if (!this.fut && this.elet <= 0) {
+          ctx.fillStyle = 'rgba(0,0,0,0.75)';
+          ctx.fillRect(0, 0, this.szeles, this.magas);
+          ctx.fillStyle = '#fff';
+          ctx.font = 'bold 48px Playfair Display, serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('Game Over! 🍕', this.szeles / 2, this.magas / 2 - 25);
+          ctx.font = '600 24px DM Sans, sans-serif';
+          ctx.fillStyle = '#D7263D';
+          ctx.fillText(`Végső pontszám: ${this.pont}`, this.szeles / 2, this.magas / 2 + 25);
+        }
+      }
+
+      kattintas(e) {
+        if (!this.fut) return;
+        const rect = this.canvas.getBoundingClientRect();
+        const mx = (e.clientX - rect.left) * (this.szeles / rect.width);
+        const my = (e.clientY - rect.top)  * (this.magas / rect.height);
+
+        this.pizzak.forEach(p => {
+          if (p.aktiv && p.tartalmazza(mx, my)) {
+            p.aktiv = false;
+            this.pont++;
+            this.robbanasok.push(new Robbanas(p.x, p.y));
+            document.getElementById('pontszam').textContent = this.pont;
+          }
+        });
+      }
+
+      vege() {
+        this.fut = false;
+        this.rajzol();
+      }
+
+      ujrakezd() {
+        this.fut           = false;
+        this.pont          = 0;
+        this.elet          = 3;
+        this.szint         = 1;
+        this.pizzak        = [];
+        this.robbanasok    = [];
+        this.keretszamlalo = 0;
+        this.pizzaKozok    = 80;
+        document.getElementById('pontszam').textContent = '0';
+        document.getElementById('elet').textContent     = '3';
+        document.getElementById('szint').textContent    = '1';
+        this.rajzol();
+      }
+
+      veletlen(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+    }
+
+    // ============================================================
+    // INICIALIZÁLÁS
+    // ============================================================
+    const canvas = document.getElementById('jatek-canvas');
+    const jatek  = new Jatek(canvas);
+    jatek.rajzol();
+
+    function jatekIndit() {
+      jatek.indit();
+      document.getElementById('inditBtn').disabled = true;
+    }
+
+    function jatekUjra() {
+      jatek.ujrakezd();
+      document.getElementById('inditBtn').disabled = false;
+    }
+  </script>
+
+</body>
+</html>
