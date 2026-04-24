@@ -9,7 +9,6 @@
 </head>
 <body>
 
-  <!-- NAVBAR -->
   <nav class="navbar">
     <div class="nav-logo">🍕 Net Pizzéria</div>
     <ul class="nav-links">
@@ -23,16 +22,13 @@
     </ul>
   </nav>
 
-  <!-- PAGE HEADER -->
   <div class="page-header">
     <h1>Fetch API CRUD</h1>
     <p>Pizzák kezelése JavaScript + Fetch API + PHP backend + MySQL adatbázis</p>
   </div>
 
-  <!-- CRUD -->
   <div class="crud-section">
 
-    <!-- FORM -->
     <div class="crud-form" id="formContainer">
       <div class="form-group">
         <label for="nev">Pizza neve</label>
@@ -72,7 +68,6 @@
     <div id="uzenet" style="display:none; padding: 0.75rem 1.2rem; border-radius: 8px;
          margin-bottom: 1rem; font-weight: 600; font-size: 0.95rem;"></div>
 
-    <!-- TÁBLÁZAT -->
     <table id="pizzaTabla">
       <thead>
         <tr>
@@ -93,11 +88,10 @@
   <script>
     const API = 'php/pizza.php';
     let osszesPizza = [];
-    let szerkesztesNev = null; // melyik pizza neve van szerkesztés alatt
+    let szerkesztesNev = null;
 
-    // ==========================================
-    // ÜZENET kijelzés
-    // ==========================================
+    // ÜZENET 
+
     function uzenetMutat(szoveg, siker = true) {
       const el = document.getElementById('uzenet');
       el.textContent = szoveg;
@@ -107,9 +101,8 @@
       setTimeout(() => { el.style.display = 'none'; }, 3000);
     }
 
-    // ==========================================
-    // READ – pizzák betöltése szerverről
-    // ==========================================
+    // READ
+
     async function pizzakBetolt() {
       try {
         const res  = await fetch(API);
@@ -121,9 +114,6 @@
       }
     }
 
-    // ==========================================
-    // TÁBLÁZAT megjelenítése
-    // ==========================================
     function megjelenitTabla(lista) {
       const tbody  = document.getElementById('pizzaTbody');
       const dbSpan = document.getElementById('db');
@@ -151,9 +141,7 @@
       dbSpan.textContent = `${lista.length} pizza`;
     }
 
-    // ==========================================
-    // CREATE / UPDATE
-    // ==========================================
+    // CREATE - UPDATE
     async function hozzaad() {
       const nev          = document.getElementById('nev').value.trim();
       const kategorianev = document.getElementById('kategorianev').value;
@@ -175,7 +163,7 @@
           const adat = await res.json();
           uzenetMutat('✅ ' + adat.uzenet);
           szerkesztesNev = null;
-          document.getElementById('submitBtn').textContent = '➕ Hozzáadás';
+          document.getElementById('submitBtn').textContent = 'Hozzáadás';
         } else {
           // CREATE
           const res = await fetch(API, {
@@ -195,9 +183,8 @@
       }
     }
 
-    // ==========================================
-    // UPDATE – szerkesztési mód
-    // ==========================================
+    // UPDATE
+    
     function szerkeszt(nev) {
       const pizza = osszesPizza.find(p => p.nev === nev);
       if (!pizza) return;
@@ -211,9 +198,7 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ==========================================
     // DELETE
-    // ==========================================
     async function torol(nev) {
       if (!confirm(`Biztosan törlöd a(z) "${nev}" pizzát?`)) return;
 
@@ -231,9 +216,8 @@
       }
     }
 
-    // ==========================================
-    // SEARCH – szűrés
-    // ==========================================
+    // SEARCH
+
     function szur() {
       const keresett = document.getElementById('kereses').value.trim().toLowerCase();
       const szurt = keresett
@@ -242,19 +226,12 @@
       megjelenitTabla(szurt);
     }
 
-    // ==========================================
-    // FORM ürítés
-    // ==========================================
     function urlapTorles() {
       document.getElementById('nev').value          = '';
       document.getElementById('kategorianev').value = '';
       document.getElementById('vegetarianus').value = 'true';
       szerkesztesNev = null;
     }
-
-    // ==========================================
-    // INIT
-    // ==========================================
     pizzakBetolt();
   </script>
 
