@@ -9,7 +9,6 @@
 </head>
 <body>
 
-  <!-- NAVBAR -->
   <nav class="navbar">
     <div class="nav-logo">🍕 Net Pizzéria</div>
     <ul class="nav-links">
@@ -23,16 +22,13 @@
     </ul>
   </nav>
 
-  <!-- PAGE HEADER -->
   <div class="page-header">
     <h1>JavaScript CRUD</h1>
     <p>Pizzák kezelése JavaScript tömbből – Create, Read, Update, Delete</p>
   </div>
 
-  <!-- CRUD -->
   <div class="crud-section">
 
-    <!-- FORM -->
     <div class="crud-form" id="formContainer">
       <div class="form-group">
         <label for="nev">Pizza neve</label>
@@ -51,16 +47,15 @@
       <div class="form-group">
         <label for="vegetarianus">Vegetáriánus?</label>
         <select id="vegetarianus">
-          <option value="true">Igen ✅</option>
-          <option value="false">Nem ❌</option>
+          <option value="true">Igen</option>
+          <option value="false">Nem</option>
         </select>
       </div>
       <div class="form-group" style="justify-content: flex-end;">
-        <button class="btn btn-primary" onclick="hozzaad()">➕ Hozzáadás</button>
+        <button class="btn btn-primary" onclick="hozzaad()">Hozzáadás</button>
       </div>
     </div>
 
-    <!-- SEARCH -->
     <div style="margin-bottom: 1rem; display: flex; gap: 0.75rem; align-items: center;">
       <input type="text" id="kereses" placeholder="🔍 Keresés pizza neve alapján..." oninput="szur()"
         style="padding: 0.6rem 1rem; border: 1.5px solid #E8DDD5; border-radius: 8px;
@@ -68,7 +63,6 @@
       <span id="db" style="color: #8C7B6E; font-size: 0.9rem;"></span>
     </div>
 
-    <!-- TABLE -->
     <table id="pizzaTabla">
       <thead>
         <tr>
@@ -85,9 +79,7 @@
   </div>
 
   <script>
-    // ==========================================
-    // ADATOK – pizza tömb (kezdeti adatok)
-    // ==========================================
+    // ADATOK
     let pizzak = [
       { nev: "Margherita",    kategorianev: "közepes", vegetarianus: true  },
       { nev: "Pepperoni",     kategorianev: "nagy",    vegetarianus: false },
@@ -97,11 +89,10 @@
       { nev: "Hawaii",        kategorianev: "kis",     vegetarianus: false },
     ];
 
-    let szerkesztesIndex = -1; // melyik sort szerkesztjük (-1 = nincs)
+    let szerkesztesIndex = -1;
 
-    // ==========================================
+   
     // READ – táblázat megjelenítése
-    // ==========================================
     function megjelenitTabla(lista) {
       const tbody = document.getElementById("pizzaTbody");
       const dbSpan = document.getElementById("db");
@@ -128,10 +119,8 @@
 
       dbSpan.textContent = `${lista.length} pizza`;
     }
-
-    // ==========================================
-    // CREATE – új pizza hozzáadása
-    // ==========================================
+    // CREATE
+ 
     function hozzaad() {
       const nev          = document.getElementById("nev").value.trim();
       const kategorianev = document.getElementById("kategorianev").value;
@@ -142,7 +131,7 @@
         return;
       }
 
-      // Ha szerkesztés módban vagyunk → UPDATE
+      //UPDATE
       if (szerkesztesIndex >= 0) {
         pizzak[szerkesztesIndex] = { nev, kategorianev, vegetarianus };
         szerkesztesIndex = -1;
@@ -158,12 +147,12 @@
       }
 
       urlapTorles();
-      szur(); // frissítjük a szűrt nézetet is
+      szur();
     }
 
-    // ==========================================
-    // UPDATE – szerkesztési mód bekapcsolása
-    // ==========================================
+ 
+    // UPDATE
+    
     function szerkeszt(index) {
       const pizza = pizzak[index];
       document.getElementById("nev").value           = pizza.nev;
@@ -176,18 +165,16 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    // ==========================================
     // DELETE – pizza törlése
-    // ==========================================
+    
     function torol(index) {
       if (!confirm(`Biztosan törlöd a(z) "${pizzak[index].nev}" pizzát?`)) return;
       pizzak.splice(index, 1);
       szur();
     }
 
-    // ==========================================
     // SEARCH – szűrés név alapján
-    // ==========================================
+    
     function szur() {
       const keresett = document.getElementById("kereses").value.trim().toLowerCase();
       const szurt = keresett
@@ -196,19 +183,13 @@
       megjelenitTabla(szurt);
     }
 
-    // ==========================================
     // SEGÉDFÜGGVÉNY – form ürítése
-    // ==========================================
     function urlapTorles() {
       document.getElementById("nev").value          = "";
       document.getElementById("kategorianev").value = "";
       document.getElementById("vegetarianus").value = "true";
       szerkesztesIndex = -1;
     }
-
-    // ==========================================
-    // INIT – oldal betöltésekor
-    // ==========================================
     megjelenitTabla(pizzak);
   </script>
 
