@@ -250,7 +250,7 @@ a { text-decoration: none; color: inherit; }
   border-color: var(--red);
 }
 
-.menu-card .tag {
+.menu-card{
   display: inline-block;
   background: #FFF0ED;
   color: var(--red);
