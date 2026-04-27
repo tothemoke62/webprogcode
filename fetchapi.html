@@ -47,12 +47,12 @@
       <div class="form-group">
         <label for="vegetarianus">Vegetáriánus?</label>
         <select id="vegetarianus">
-          <option value="true">Igen ✅</option>
-          <option value="false">Nem ❌</option>
+          <option value="true">Igen </option>
+          <option value="false">Nem </option>
         </select>
       </div>
       <div class="form-group" style="justify-content: flex-end;">
-        <button class="btn btn-primary" id="submitBtn" onclick="hozzaad()">➕ Hozzáadás</button>
+        <button class="btn btn-primary" id="submitBtn" onclick="hozzaad()"> Hozzáadás</button>
       </div>
     </div>
 
@@ -131,8 +131,8 @@
             </span>
           </td>
           <td style="display:flex; gap:0.5rem;">
-            <button class="btn btn-edit"   onclick="szerkeszt('${pizza.nev}')">✏️ Szerkeszt</button>
-            <button class="btn btn-delete" onclick="torol('${pizza.nev}')">🗑️ Töröl</button>
+            <button class="btn btn-edit"   onclick="szerkeszt('${pizza.nev}')"> Szerkeszt</button>
+            <button class="btn btn-delete" onclick="torol('${pizza.nev}')">Töröl</button>
           </td>
         `;
         tbody.appendChild(sor);
@@ -161,7 +161,7 @@
             body: JSON.stringify({ nev, kategorianev, vegetarianus })
           });
           const adat = await res.json();
-          uzenetMutat('✅ ' + adat.uzenet);
+          uzenetMutat(' ' + adat.uzenet);
           szerkesztesNev = null;
           document.getElementById('submitBtn').textContent = 'Hozzáadás';
         } else {
@@ -172,8 +172,8 @@
             body: JSON.stringify({ nev, kategorianev, vegetarianus })
           });
           const adat = await res.json();
-          if (adat.hiba) { uzenetMutat('❌ ' + adat.hiba, false); return; }
-          uzenetMutat('✅ ' + adat.uzenet);
+          if (adat.hiba) { uzenetMutat(' ' + adat.hiba, false); return; }
+          uzenetMutat(' ' + adat.uzenet);
         }
 
         urlapTorles();
