@@ -110,8 +110,8 @@
             </span>
           </td>
           <td style="display:flex; gap:0.5rem;">
-            <button class="btn btn-edit" onclick="szerkeszt(${index})">✏️ Szerkeszt</button>
-            <button class="btn btn-delete" onclick="torol(${index})">🗑️ Töröl</button>
+            <button class="btn btn-edit" onclick="szerkeszt(${index})"> Szerkeszt</button>
+            <button class="btn btn-delete" onclick="torol(${index})">Töröl</button>
           </td>
         `;
         tbody.appendChild(sor);
@@ -135,7 +135,7 @@
       if (szerkesztesIndex >= 0) {
         pizzak[szerkesztesIndex] = { nev, kategorianev, vegetarianus };
         szerkesztesIndex = -1;
-        document.querySelector("#formContainer .btn-primary").textContent = "➕ Hozzáadás";
+        document.querySelector("#formContainer .btn-primary").textContent = "Hozzáadás";
       } else {
         // CREATE
         const letezik = pizzak.some(p => p.nev.toLowerCase() === nev.toLowerCase());
@@ -160,7 +160,7 @@
       document.getElementById("vegetarianus").value  = pizza.vegetarianus.toString();
 
       szerkesztesIndex = index;
-      document.querySelector("#formContainer .btn-primary").textContent = "💾 Mentés";
+      document.querySelector("#formContainer .btn-primary").textContent = "Mentés";
       document.getElementById("nev").focus();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
