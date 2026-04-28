@@ -47,12 +47,12 @@
       <div class="form-group">
         <label for="vegetarianus">Vegetáriánus?</label>
         <select id="vegetarianus">
-          <option value="true">Igen ✅</option>
-          <option value="false">Nem ❌</option>
+          <option value="true">Igen</option>
+          <option value="false">Nem</option>
         </select>
       </div>
       <div class="form-group" style="justify-content: flex-end;">
-        <button class="btn btn-primary" id="submitBtn" onclick="hozzaad()">➕ Hozzáadás</button>
+        <button class="btn btn-primary" id="submitBtn" onclick="hozzaad()">Hozzáadás</button>
       </div>
     </div>
 
@@ -194,7 +194,7 @@
       document.getElementById('vegetarianus').value = pizza.vegetarianus.toString();
 
       szerkesztesNev = nev;
-      document.getElementById('submitBtn').textContent = '💾 Mentés';
+      document.getElementById('submitBtn').textContent = 'Mentés';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
