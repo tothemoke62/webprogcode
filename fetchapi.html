@@ -9,7 +9,6 @@
 </head>
 <body>
 
-  <!-- NAVBAR -->
   <nav class="navbar">
     <div class="nav-logo">🍕 Net Pizzéria</div>
     <ul class="nav-links">
@@ -23,16 +22,12 @@
     </ul>
   </nav>
 
-  <!-- PAGE HEADER -->
   <div class="page-header">
     <h1>Fetch API CRUD</h1>
     <p>Pizzák kezelése JavaScript + Fetch API + PHP backend + MySQL adatbázis</p>
   </div>
 
-  <!-- CRUD -->
   <div class="crud-section">
-
-    <!-- FORM -->
     <div class="crud-form" id="formContainer">
       <div class="form-group">
         <label for="nev">Pizza neve</label>
@@ -51,16 +46,15 @@
       <div class="form-group">
         <label for="vegetarianus">Vegetáriánus?</label>
         <select id="vegetarianus">
-          <option value="true">Igen ✅</option>
-          <option value="false">Nem ❌</option>
+          <option value="true">Igen</option>
+          <option value="false">Nem</option>
         </select>
       </div>
       <div class="form-group" style="justify-content: flex-end;">
-        <button class="btn btn-primary" id="submitBtn" onclick="hozzaad()">➕ Hozzáadás</button>
+        <button class="btn btn-primary" id="submitBtn" onclick="hozzaad()">Hozzáadás</button>
       </div>
     </div>
 
-    <!-- KERESÉS -->
     <div style="margin-bottom: 1rem; display: flex; gap: 0.75rem; align-items: center;">
       <input type="text" id="kereses" placeholder="🔍 Keresés pizza neve alapján..." oninput="szur()"
         style="padding: 0.6rem 1rem; border: 1.5px solid #E8DDD5; border-radius: 8px;
@@ -68,11 +62,9 @@
       <span id="db" style="color: #8C7B6E; font-size: 0.9rem;"></span>
     </div>
 
-    <!-- ÜZENET -->
     <div id="uzenet" style="display:none; padding: 0.75rem 1.2rem; border-radius: 8px;
          margin-bottom: 1rem; font-weight: 600; font-size: 0.95rem;"></div>
 
-    <!-- TÁBLÁZAT -->
     <table id="pizzaTabla">
       <thead>
         <tr>
@@ -90,7 +82,6 @@
 
   </div>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <div class="container">
       <p class="footer-title">Web Programozás-1 Előadás Házi Feladat</p>
@@ -102,11 +93,8 @@
   <script>
     const API = 'php/pizza.php';
     let osszesPizza = [];
-    let szerkesztesNev = null; // melyik pizza neve van szerkesztés alatt
+    let szerkesztesNev = null; 
 
-    // ==========================================
-    // ÜZENET kijelzés
-    // ==========================================
     function uzenetMutat(szoveg, siker = true) {
       const el = document.getElementById('uzenet');
       el.textContent = szoveg;
@@ -116,9 +104,6 @@
       setTimeout(() => { el.style.display = 'none'; }, 3000);
     }
 
-    // ==========================================
-    // READ – pizzák betöltése szerverről
-    // ==========================================
     async function pizzakBetolt() {
       try {
         const res  = await fetch(API);
@@ -130,9 +115,6 @@
       }
     }
 
-    // ==========================================
-    // TÁBLÁZAT megjelenítése
-    // ==========================================
     function megjelenitTabla(lista) {
       const tbody  = document.getElementById('pizzaTbody');
       const dbSpan = document.getElementById('db');
@@ -150,8 +132,8 @@
             </span>
           </td>
           <td style="display:flex; gap:0.5rem;">
-            <button class="btn btn-edit"   onclick="szerkeszt('${pizza.nev}')">✏️ Szerkeszt</button>
-            <button class="btn btn-delete" onclick="torol('${pizza.nev}')">🗑️ Töröl</button>
+            <button class="btn btn-edit"   onclick="szerkeszt('${pizza.nev}')">Szerkeszt</button>
+            <button class="btn btn-delete" onclick="torol('${pizza.nev}')">Töröl</button>
           </td>
         `;
         tbody.appendChild(sor);
@@ -160,9 +142,6 @@
       dbSpan.textContent = `${lista.length} pizza`;
     }
 
-    // ==========================================
-    // CREATE / UPDATE
-    // ==========================================
     async function hozzaad() {
       const nev          = document.getElementById('nev').value.trim();
       const kategorianev = document.getElementById('kategorianev').value;
@@ -175,7 +154,6 @@
 
       try {
         if (szerkesztesNev) {
-          // UPDATE
           const res = await fetch(API, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -184,9 +162,8 @@
           const adat = await res.json();
           uzenetMutat('✅ ' + adat.uzenet);
           szerkesztesNev = null;
-          document.getElementById('submitBtn').textContent = '➕ Hozzáadás';
+          document.getElementById('submitBtn').textContent = 'Hozzáadás';
         } else {
-          // CREATE
           const res = await fetch(API, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -204,9 +181,6 @@
       }
     }
 
-    // ==========================================
-    // UPDATE – szerkesztési mód
-    // ==========================================
     function szerkeszt(nev) {
       const pizza = osszesPizza.find(p => p.nev === nev);
       if (!pizza) return;
@@ -220,9 +194,6 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ==========================================
-    // DELETE
-    // ==========================================
     async function torol(nev) {
       if (!confirm(`Biztosan törlöd a(z) "${nev}" pizzát?`)) return;
 
@@ -239,10 +210,6 @@
         uzenetMutat('Hiba: ' + e.message, false);
       }
     }
-
-    // ==========================================
-    // SEARCH – szűrés
-    // ==========================================
     function szur() {
       const keresett = document.getElementById('kereses').value.trim().toLowerCase();
       const szurt = keresett
@@ -250,20 +217,13 @@
         : osszesPizza;
       megjelenitTabla(szurt);
     }
-
-    // ==========================================
-    // FORM ürítés
-    // ==========================================
     function urlapTorles() {
       document.getElementById('nev').value          = '';
       document.getElementById('kategorianev').value = '';
       document.getElementById('vegetarianus').value = 'true';
       szerkesztesNev = null;
     }
-
-    // ==========================================
-    // INIT
-    // ==========================================
+    
     pizzakBetolt();
   </script>
 
