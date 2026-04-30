@@ -13,9 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 try {
     $dbh = new PDO(
-        'mysql:host=localhost;dbname=pizza;charset=utf8',
-        'root',
-        '',
+        'mysql:host=mysql.omega;port=3306;dbname=adat1;charset=utf8',
+        'adat1',
+        'NakamuraHaru22',
         array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
     );
 } catch (PDOException $e) {
