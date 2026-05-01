@@ -56,7 +56,7 @@
     </div>
 
     <div style="margin-bottom: 1rem; display: flex; gap: 0.75rem; align-items: center;">
-      <input type="text" id="kereses" placeholder="🔍 Keresés pizza neve alapján..." oninput="szur()"
+      <input type="text" id="kereses" placeholder="Keresés pizza neve alapján..." oninput="szur()"
         style="padding: 0.6rem 1rem; border: 1.5px solid #E8DDD5; border-radius: 8px;
                font-family: inherit; font-size: 0.95rem; width: 320px; background: #fff; outline: none;" />
       <span id="db" style="color: #8C7B6E; font-size: 0.9rem;"></span>
@@ -141,7 +141,7 @@
 
       dbSpan.textContent = `${lista.length} pizza`;
     }
-
+    <!-- modosítottam a kiírást: Emoke -->
     async function hozzaad() {
       const nev          = document.getElementById('nev').value.trim();
       const kategorianev = document.getElementById('kategorianev').value;
@@ -160,7 +160,7 @@
             body: JSON.stringify({ nev, kategorianev, vegetarianus })
           });
           const adat = await res.json();
-          uzenetMutat('✅ ' + adat.uzenet);
+          uzenetMutat(' ' + adat.uzenet);
           szerkesztesNev = null;
           document.getElementById('submitBtn').textContent = 'Hozzáadás';
         } else {
@@ -170,8 +170,8 @@
             body: JSON.stringify({ nev, kategorianev, vegetarianus })
           });
           const adat = await res.json();
-          if (adat.hiba) { uzenetMutat('❌ ' + adat.hiba, false); return; }
-          uzenetMutat('✅ ' + adat.uzenet);
+          if (adat.hiba) { uzenetMutat(' ' + adat.hiba, false); return; }
+          uzenetMutat(' ' + adat.uzenet);
         }
 
         urlapTorles();
@@ -190,7 +190,7 @@
       document.getElementById('vegetarianus').value = pizza.vegetarianus.toString();
 
       szerkesztesNev = nev;
-      document.getElementById('submitBtn').textContent = '💾 Mentés';
+      document.getElementById('submitBtn').textContent = 'Mentés';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
