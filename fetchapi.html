@@ -128,7 +128,7 @@
           <td>${pizza.kategorianev}</td>
           <td>
             <span class="badge ${pizza.vegetarianus ? 'badge-green' : 'badge-red'}">
-              ${pizza.vegetarianus ? '✅ Igen' : '❌ Nem'}
+              ${pizza.vegetarianus ? 'Igen' : ' Nem'}
             </span>
           </td>
           <td style="display:flex; gap:0.5rem;">
@@ -204,7 +204,7 @@
           body: JSON.stringify({ nev })
         });
         const adat = await res.json();
-        uzenetMutat('✅ ' + adat.uzenet);
+        uzenetMutat(' ' + adat.uzenet);
         pizzakBetolt();
       } catch (e) {
         uzenetMutat('Hiba: ' + e.message, false);
